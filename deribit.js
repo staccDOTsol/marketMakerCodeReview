@@ -431,13 +431,13 @@ setInterval(function() {
         var go = true;
         for (var a in result) {
             for (var o in result[a]) {
-                //console.log(result[a][o])                                            5
-                if (result[a][o].direction == 'sell' && result[a][o].price > lb + 2) { 
+                //console.log(result[a][o])                                           
+                if (result[a][o].direction == 'sell' && result[a][o].price > ha + 2) { 
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                                                                                              
-                } else if (result[a][o].direction == 'buy' && result[a][o].price < ha - 2) {  
+                } else if (result[a][o].direction == 'buy' && result[a][o].price < lb + 2) {  
                     restClient.cancel(result[a][o].orderId).then((result) => {          
                                                                                         
                     })
