@@ -338,7 +338,7 @@ setInterval(function() {
     restClient.cancelall().then((result) => {
 
     })
-}, 60 * 5 * 60 * 5);
+}, 60 * 1000 * 60 * 5);
 
 // a failsafe that triggers two possibilities based on a functino of the tar variable
 
