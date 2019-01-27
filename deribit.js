@@ -162,7 +162,7 @@ async function doPost(req, res) {
 
 // initially set our startBtc (static)
 
-startBtc = 149.0925;
+startBtc = 82.11128176;
 
 // add info to gsheet every 60s
 
