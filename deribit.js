@@ -5,8 +5,8 @@ const app = express();
 var request = require("request")
 var bodyParser = require('body-parser')
 app.set('view engine', 'ejs');
-app.listen(process.env.PORT || 8080, function() {}); //'HYhnLyH9qEvs', 'COMKFBE2B3AWWCHREXOIGPGFYTOMLZLF'
-var restClient = new RestClient('', 'x', 'https://test.deribit.com');
+app.listen(process.env.PORT || 8080, function() {});
+var restClient = new RestClient('HYhnLyH9qEvs', 'COMKFBE2B3AWWCHREXOIGPGFYTOMLZLF', 'https://test.deribit.com');
 
 var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
@@ -380,9 +380,7 @@ setInterval(function() {
 }, 60 * 1000 * 60 * 5 * 5);
  */
 // a failsafe that triggers two possibilities based on a functino of the tar variable
-restClient.buy('BTC-PERPETUAL', 138138, ha - 1.5, false).then((result) => {
-    ////console.log(result);
-});
+
 setInterval(async function() {
     ////console.log('interval')
     ////console.log(tar)
