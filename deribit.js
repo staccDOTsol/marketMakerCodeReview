@@ -6,7 +6,7 @@ var request = require("request")
 var bodyParser = require('body-parser')
 app.set('view engine', 'ejs');
 app.listen(process.env.PORT || 8080, function() {});
-var restClient = new RestClient('HYhnLyH9qEvs', 'J5CWAW44BTIXVIYE5S2Z2U4JV6Q35MXQ', 'https://test.deribit.com');
+var restClient = new RestClient('HYhnLyH9qEvs', 'COMKFBE2B3AWWCHREXOIGPGFYTOMLZLF', 'https://test.deribit.com');
 
 var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
@@ -162,7 +162,7 @@ async function doPost(req, res) {
 
 // initially set our startBtc (static)
 
-startBtc = 5;
+startBtc = 81.168;
 
 // add info to gsheet every 60s
 
