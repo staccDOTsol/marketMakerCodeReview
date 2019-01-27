@@ -303,6 +303,8 @@ setInterval(function() {
         avail = result.result.availableFunds;
         btcNow = (result.result.equity);
         if (avail / btcNow < 0.35) {
+             console.log(new Date(Date.now()).toTimeString() + ': marin avail <35%, stopping orders in opposng direction')
+
              restClient.cancelall().then((result) => {
 
             })
