@@ -310,12 +310,16 @@ setInterval(function() {
             for (var a in result) {
                 for (var o in result[a]) {
                     if (result[a][o].direction == 'sell' && pos < 0) {
+                        console.log('selling, pos < 0')
+                        console.log('pos: ' + pos)
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                         go = false;
 
                     } else if (result[a][o].direction == 'buy' && pos > 0) {
+                        console.log('buying, pos > 0')
+                        console.log('pos: ' + pos)
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
