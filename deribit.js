@@ -254,9 +254,9 @@ function sheetaddrow() {
                 'Pos': pos,
                 'HA': ha,
                 'tar': tar,
-                'tar 1.5': tar * 2,
+                'tar 1.5': tar * 1.5,
                 'last liquidation': liq,
-                'neg tar 1.5': tar * 2 * -1,
+                'neg tar 1.5': tar * 1.5 * -1,
                 'Avail': avail,
                 'btcNow': btcNow,
                 'PNL Current Pos': pnl * 100 + '%',
@@ -365,7 +365,7 @@ setInterval(async function() {
         for (var r in result) {
             for (var a in result[r]) {
                 //console.log(result[r][a].direction);
-                if (result[r][a].size > ((tar * 3.5)) || result[r][a].size < (-1 * (tar * 3.5))) {
+                if (result[r][a].size > ((tar * 1.5)) || result[r][a].size < (-1 * (tar * 1.5))) {
                     var s = result[r][a].size;
                     //console.log('20000')
                     if (result[r][a].direction == 'sell' && gogobuy) {
@@ -397,7 +397,7 @@ setInterval(async function() {
                         });
                     }
                 }
-                if (result[r][a].size < ((tar * 7)) || result[r][a].size > (-1 * (tar * 7))) {
+                if (result[r][a].size < ((tar * 3)) || result[r][a].size > (-1 * (tar * 3))) {
                     done3x = false;
                 }
                 if (done3x == false && result[r][a].size > ((tar * 7)) || result[r][a].size < (-1 * (tar * 7))) {
