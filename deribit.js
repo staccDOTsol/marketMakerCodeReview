@@ -470,13 +470,13 @@ setInterval(function() {
         for (var a in result) {
             for (var o in result[a]) {
                 ////console.log(result[a][o])                                           
-                if (result[a][o].direction == 'sell' && result[a][o].price< ha - 4 ) { 
+                if (result[a][o].direction == 'sell' && result[a][o].price< ha - 2) { 
                     console.log('buying, cancel ha - 4')
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                                                                                              
-                } else if (result[a][o].direction == 'buy' && result[a][o].price > lb + 4) { 
+                } else if (result[a][o].direction == 'buy' && result[a][o].price > lb + 2) { 
                     console.log('selling, cancel lb + 4')
                     restClient.cancel(result[a][o].orderId).then((result) => {          
                                                                                         
