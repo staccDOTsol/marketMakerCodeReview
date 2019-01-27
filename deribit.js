@@ -331,6 +331,7 @@ setInterval(function() {
 
                 gogosell = false
             }
+        })
         } else {
             gogobuy = true;
             gogosell = true;
