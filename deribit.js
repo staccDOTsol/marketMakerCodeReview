@@ -6,7 +6,7 @@ var request = require("request")
 var bodyParser = require('body-parser')
 app.set('view engine', 'ejs');
 app.listen(process.env.PORT || 8080, function() {});
-var restClient = new RestClient('', '', 'https://test.deribit.com');
+var restClient = new RestClient('HYhnLyH9qEvs', 'COMKFBE2B3AWWCHREXOIGPGFYTOMLZLF', 'https://test.deribit.com');
 
 var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
@@ -89,7 +89,7 @@ var can = false;
 
 // our google doc
 
-var doc = new GoogleSpreadsheet('');
+var doc = new GoogleSpreadsheet('13Qf3LNU52nfY53uc3oI6KJH86Ie0PQlONZRpvOQlGCw');
 
 // function for providing views/index.ejs with more data
 
@@ -302,8 +302,8 @@ setInterval(function() {
         //////console.log(result);
         avail = result.result.availableFunds;
         btcNow = (result.result.equity);
-        if (avail / btcNow < 0.15) {
-             console.log(new Date(Date.now()).toTimeString() + ': margin avail <15%, stopping orders in opposng direction')
+        if (avail / btcNow < 0.35) {
+             console.log(new Date(Date.now()).toTimeString() + ': margin avail <35%, stopping orders in opposng direction')
              restClient.getopenorders('BTC-PERPETUAL').then((result) => {
             var go = true;
             for (var a in result) {
