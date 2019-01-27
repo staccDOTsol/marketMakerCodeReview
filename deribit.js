@@ -6,7 +6,7 @@ var request = require("request")
 var bodyParser = require('body-parser')
 app.set('view engine', 'ejs');
 app.listen(process.env.PORT || 8080, function() {});
-var restClient = new RestClient('HwjG9hsiYvLb', '4D6CBOCBSX65VEHGI6Z24CZAZBI2QYYR', 'https://test.deribit.com');
+var restClient = new RestClient('HYhnLyH9qEvs', 'COMKFBE2B3AWWCHREXOIGPGFYTOMLZLF', 'https://test.deribit.com');
 
 var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
@@ -89,7 +89,7 @@ var can = false;
 
 // our google doc
 
-var doc = new GoogleSpreadsheet('1nWo7Cn-tRTEgPyjGCxIJ31D9bQLhpOjypKe9QRx_xxc');
+var doc = new GoogleSpreadsheet('13Qf3LNU52nfY53uc3oI6KJH86Ie0PQlONZRpvOQlGCw');
 
 // function for providing views/index.ejs with more data
 
