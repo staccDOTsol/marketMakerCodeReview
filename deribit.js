@@ -180,7 +180,7 @@ setTimeout(function() {
 
 setInterval(async function() {
     if (avail / btcNow < 0.55) {
-        console.log('margin > 55%')
+        console.log(new Date(Date.now()).toTimeString() + ': margin > 55%')
         liq += ' margin > 55%'
         restClient.positions().then((result) => {
             for (var r in result) {
@@ -205,7 +205,7 @@ setInterval(async function() {
 setInterval(async function() {
     if (oldPerc != 0) {
         if (-1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4) - oldPerc < -0.015) {
-            console.log(' portfolio > 1.5% loss in 30s')
+            console.log(new Date(Date.now()).toTimeString() + ': portfolio > 1.5% loss in 30s')
             liq += ' portfolio > 1.5% loss in 30s'
             restClient.positions().then((result) => {
                 for (var r in result) {
@@ -278,7 +278,7 @@ setInterval(async function() {
                 pnl = result[r][a].profitLoss;
                 if (result[r][a].profitLoss < -0.050) {
                     liq += 'pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)'
-                    console.log('pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)')
+                    console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)')
                     if (result[r][a].direction == 'sell' && gogobuy) {
                         restClient.buy('BTC-PERPETUAL', -1 * result[r][a].size, lb - 2).then((result) => {
 
@@ -404,7 +404,7 @@ setInterval(async function() {
                 if (done3x == false && result[r][a].size > ((tar * 3)) || result[r][a].size < (-1 * (tar * 3))) {
                     done3x = true;
                     liq += 'double outter bounds'
-                    console.log('double outter bounds')
+                    console.log(new Date(Date.now()).toTimeString() + ': double outter bounds')
                     var s = result[r][a].size;
                     ////console.log('20000')
                     if (result[r][a].direction == 'sell' && gogobuy) {
@@ -599,7 +599,7 @@ setInterval(function() {
 
 setInterval(function() {
     if (count > 3) {
-        console.log('taking 20s break from orders because 4+ orders in last 8s')
+        console.log(new Date(Date.now()).toTimeString() + ': taking 20s break from orders because 4+ orders in last 8s')
         liq += 'not actually liquidating, but there were 4+ buys/sells at new prices so we took a 20s break'
         gogo = false;
         setTimeout(function() {
