@@ -304,7 +304,7 @@ setInterval(function() {
         btcNow = (result.result.equity);
         if (avail / btcNow < 0.35) {
              console.log(new Date(Date.now()).toTimeString() + ': marin avail <35%, stopping orders in opposng direction')
-
+             console.log('cancelall margin avail <35%')
              restClient.cancelall().then((result) => {
 
             })
@@ -453,11 +453,19 @@ setInterval(function() {
             for (var o in result[a]) {
                 ////console.log(result[a][o])                                           
                 if (result[a][o].direction == 'buy' && result[a][o].price< ha - 2 ) { 
+                    console.log('buying, cancel ha - 2')
+                    console.log('ha: ' + ha)
+                    console.log('ha - 2: ' + ha -2)
+                    console.log('price: ' + result[a][o].price)
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                                                                                              
-                } else if (result[a][o].direction == 'sell' && result[a][o].price > lb + 2) {  
+                } else if (result[a][o].direction == 'sell' && result[a][o].price > lb + 2) { 
+                    console.log('selling, cancel lb + 2')
+                    console.log('lb: ' + lb)
+                    console.log('lb + 2: ' + lb +2)
+                    console.log('price: ' + result[a][o].price)
                     restClient.cancel(result[a][o].orderId).then((result) => {          
                                                                                         
                     })
