@@ -415,7 +415,7 @@ setInterval(async function() {
                             //console.log(result);
                             //console.log(result);
                         });
-                        restClient.buy('BTC-PERPETUAL', -1 * Math.floor(s / 4), lb - 0.5, true).then((result) => {
+                        restClient.buy('BTC-PERPETUAL', -1 * Math.floor(s / 4), lb - 0.5).then((result) => {
                             //console.log(result);
                             //console.log(result);
                         });
@@ -427,7 +427,7 @@ setInterval(async function() {
                         restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), ha + 1.0, true).then((result) => {
                             //console.log(result);
                         });
-                        restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), ha + 0.5, true).then((result) => {
+                        restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), ha + 0.5).then((result) => {
                             //console.log(result);
                         });
                     }
