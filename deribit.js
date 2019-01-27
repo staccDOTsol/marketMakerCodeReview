@@ -448,12 +448,12 @@ setInterval(function() {
         for (var a in result) {
             for (var o in result[a]) {
                 //console.log(result[a][o])                                           
-                if (result[a][o].direction == 'buy' && result[a][o].price > ha + 2) { 
+                if (result[a][o].direction == 'buy' && result[a][o].price< lb + 2 ) { 
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                                                                                              
-                } else if (result[a][o].direction == 'sell' && result[a][o].price < lb + 2) {  
+                } else if (result[a][o].direction == 'sell' && result[a][o].price > ha + 2) {  
                     restClient.cancel(result[a][o].orderId).then((result) => {          
                                                                                         
                     })
