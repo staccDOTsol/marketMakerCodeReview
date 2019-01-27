@@ -382,7 +382,7 @@ setInterval(async function() {
                         });
 
                         //console.log(result);
-                    } else if (result[r][a].direction == 'buy' && gogosell{
+                    } else if (result[r][a].direction == 'buy' && gogosell){
                         //console.log('sellsell')
                         restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), lb + 1.5).then((result) => {
                             //console.log(result);
