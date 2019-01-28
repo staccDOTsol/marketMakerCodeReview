@@ -325,20 +325,10 @@ setInterval(function() {
                 }
             }
 
-            if (pos > 0){
-                gogobuy = false;
-            }
-            else {
-
-                gogosell = false
-            }
         })
-        } else {
-            gogobuy = true;
-            gogosell = true;
-        }
+        } 
     });
-}, 1000)
+}, 15000)
 
 // update our tar value based on a fraction of balance
 
