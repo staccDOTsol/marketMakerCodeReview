@@ -278,22 +278,27 @@ let pnlclosed = 0;
 
 setInterval(async function() {
     restClient.positions().then((result) => {
+        setTimeout(async function(){
+
         for (var r in result) {
             for (var a in result[r]) {
                 pnl = result[r][a].floatingPl;
                 if (result[r][a].floatingPl < -0.0005) {
                     liq += 'pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)'
                     console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at market, P/L: ' + result[r][a].profitLoss)
-                    plclosed+=result[r][a].profitLoss;
+                    pnlclosed+=result[r][a].profitLoss;
                     if (result[r][a].direction == 'sell' && gogobuy) {
                         
-                        exchange.createMarketBuyOrder ('BTC-PERPETUAL', -1 * result[r][a].size);
+                       var o = await  exchange.createMarketBuyOrder ('BTC-PERPETUAL', -1 * result[r][a].size);
+                       console.log(o)
                     } else if (result[r][a].direction == 'buy' ) {
-                        exchange.createMarketSellOrder ('BTC-PERPETUAL', 1 * result[r][a].size);
+                       var o =  exchange.createMarketSellOrder ('BTC-PERPETUAL', 1 * result[r][a].size);
+                       console.log(o)
                     }
                 }
             }
         }
+        }, 0)
     });
 }, 7500)
 
