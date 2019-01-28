@@ -92,7 +92,7 @@ var can = false;
 
 // our google doc
 
-var doc = new GoogleSpreadsheet('1l7-x');
+var doc = new GoogleSpreadsheet('1l7-');
 
 // function for providing views/index.ejs with more data
 
@@ -281,7 +281,7 @@ setInterval(async function() {
                 pnl = result[r][a].floatingPl;
                 if (result[r][a].floatingPl < -0.050) {
                     liq += 'pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)'
-                    console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at market, P/L: '  result[r][a].profitLoss)
+                    console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at market, P/L: ' + result[r][a].profitLoss)
                     if (result[r][a].direction == 'sell' && gogobuy) {
                         
                         exchange.createMarketBuyOrder ('BTC/USD', -1 * result[r][a].size);
