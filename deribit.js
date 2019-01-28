@@ -165,7 +165,7 @@ async function doPost(req, res) {
 
 // initially set our startBtc (static)
 
-startBtc = 82.11128176;
+startBtc = 0.127466248;
 
 // add info to gsheet every 60s
 
@@ -263,6 +263,7 @@ function sheetaddrow() {
                 'Avail': avail,
                 'btcNow': btcNow,
                 'PNL Current Pos': pnl * 100 + '%',
+                'PNL Closed Failsafe': pnlclosed,
                 'Difference': btcNow - avail,
                 'Percent': -1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4) + '%'
 
@@ -272,6 +273,7 @@ function sheetaddrow() {
     } catch (err) { //////console.log(err);}
     }
 }
+let pnlclosed = 0;
 // failsafe for if our position loses a % value
 
 setInterval(async function() {
@@ -279,14 +281,15 @@ setInterval(async function() {
         for (var r in result) {
             for (var a in result[r]) {
                 pnl = result[r][a].floatingPl;
-                if (result[r][a].floatingPl < -0.050) {
+                if (result[r][a].floatingPl < -0.0005) {
                     liq += 'pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)'
                     console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at market, P/L: ' + result[r][a].profitLoss)
+                    plclosed+=result[r][a].profitLoss;
                     if (result[r][a].direction == 'sell' && gogobuy) {
                         
-                        exchange.createMarketBuyOrder ('BTC/USD', -1 * result[r][a].size);
+                        exchange.createMarketBuyOrder ('BTC-PERPETUAL', -1 * result[r][a].size);
                     } else if (result[r][a].direction == 'buy' ) {
-                        exchange.createMarketSellOrder ('BTC/USD', 1 * result[r][a].size);
+                        exchange.createMarketSellOrder ('BTC-PERPETUAL', 1 * result[r][a].size);
                     }
                 }
             }
