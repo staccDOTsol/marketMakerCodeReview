@@ -6,7 +6,7 @@ var request = require("request")
 var bodyParser = require('body-parser')
 app.set('view engine', 'ejs');
 app.listen(process.env.PORT || 8080, function() {});
-var restClient = new RestClient('', '', 'https://test.deribit.com');
+var restClient = new RestClient('HYhnLyH9qEvs', 'HKEHTVP55VPQBPJYSTJ5CPA5K33HHNEB', 'https://test.deribit.com');
 
 var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
@@ -89,7 +89,7 @@ var can = false;
 
 // our google doc
 
-var doc = new GoogleSpreadsheet('');
+var doc = new GoogleSpreadsheet('1whcNDnxf59M_ZGgG85hyZfaLtce3Ip2hzLppMHxnKYU');
 
 // function for providing views/index.ejs with more data
 
@@ -185,11 +185,11 @@ setInterval(async function() {
         restClient.positions().then((result) => {
             for (var r in result) {
                 for (var a in result[r]) {
-                    if (result[r][a].direction == 'sell' && gogobuy) {
+                    if (result[r][a].direction == 'sell') {
                         restClient.buy('BTC-PERPETUAL', -1 * result[r][a].size, lb, true).then((result) => {
 
                         });
-                    } else if (gogosell &&result[r][a].direction == 'buy' ){
+                    } else if (result[r][a].direction == 'buy' ){
                         restClient.sell('BTC-PERPETUAL', 1 * result[r][a].size, lb, true).then((result) => {
 
                         });
@@ -210,11 +210,11 @@ setInterval(async function() {
             restClient.positions().then((result) => {
                 for (var r in result) {
                     for (var a in result[r]) {
-                        if (result[r][a].direction == 'sell' && gogobuy) {
+                        if (result[r][a].direction == 'sell') {
                             restClient.buy('BTC-PERPETUAL', -1 * result[r][a].size, lb, true).then((result) => {
 
                             });
-                        } else if (gogosell && result[r][a].direction == 'buy') {
+                        } else if ( result[r][a].direction == 'buy') {
                             restClient.sell('BTC-PERPETUAL', 1 * result[r][a].size, lb, true).then((result) => {
 
                             });
@@ -279,11 +279,11 @@ setInterval(async function() {
                 if (result[r][a].profitLoss < -0.050) {
                     liq += 'pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)'
                     console.log(new Date(Date.now()).toTimeString() + ': pos < 5% - selling/buying back in at +2$/-$2 best bid/ask (mostly market!)')
-                    if (result[r][a].direction == 'sell' && gogobuy) {
+                    if (result[r][a].direction == 'sell' ) {
                         restClient.buy('BTC-PERPETUAL', -1 * result[r][a].size, lb - 2).then((result) => {
 
                         });
-                    } else if (result[r][a].direction == 'buy' && gogosell) {
+                    } else if (result[r][a].direction == 'buy' ) {
                         restClient.sell('BTC-PERPETUAL', 1 * result[r][a].size, ha + 2).then((result) => {
 
                         });
