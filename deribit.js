@@ -191,7 +191,7 @@ async function doPost(req, res) {
 
 // initially set our startBtc (static)
 
-startBtc =0.118756459;
+startBtc =0.076157879;
 
 // add info to gsheet every 60s
 
@@ -408,20 +408,7 @@ setInterval(async function() {
     restClient.positions().then((result) => {
         for (var r in result) {
             for (var a in result[r]) {
-                if (result[r][a].size < 0){
-                    posDirOld = posDir;
-                    posDir = -1;
-                }
-                else {
-
-                    posDirOld = posDir;
-                    posDir = 1;
-                }
-                if (posDirOld != posDir){
-                    console.log('switcheroo');
-                     oldPerc = -1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4);
-                     console.log('oldperc: ' + oldPerc)
-                }
+                var laladir = result[r][a].size;
                 //////console.log(result[r][a].direction);
                 if (gogoFour < 25 && result[r][a].size > ((tar * 1.5)) || result[r][a].size < (-1 * (tar * 1.5))) {
                     var s = result[r][a].size;
@@ -494,6 +481,22 @@ setInterval(async function() {
 
             }
         }
+                if (laladir < 0){
+                    posDirOld = posDir;
+                    posDir = -1;
+                }
+                else {
+
+                    posDirOld = posDir;
+                    posDir = 1;
+                }
+                if (posDirOld != posDir){
+                    console.log('switcheroo');
+                    console.log(posDir)
+                    console.log(posDirOld)
+                     oldPerc = -1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4);
+                     console.log('oldperc: ' + oldPerc)
+                }
     })
 
 
