@@ -8,7 +8,7 @@
     "bitmex-realtime-api": "^0.4.0",
     "body-parser": "^1.18.3",
     "ccxt": "^1.18.152",
-    "deribit-api": "*",
+    "deribit-api": "^1.0.2",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "google-spreadsheet": "*",

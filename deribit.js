@@ -15,32 +15,11 @@ var GoogleSpreadsheet = require('google-spreadsheet');
 var async = require('async');
 var Trendyways = require ("./trendyways.min.js");
 //vars
-var bands = {'fornow':'empty'};
-setInterval(function(){
-    BB();
-}, 60* 1000)
-BB();
+var bands = [];
+
+var bbc = 0;
+
 askHistory = []
-async function BB(){
-
-let t = await exchange.fetchTicker('BTC-PERPETUAL');
-
-askHistory.push({c:t.ask});
-console.log(askHistory.length)
-    if (askHistory.length > 8){
-        askHistory.shift();
-        for (var k = 1; k < 4; k++)
-    {
-      for (var n = 1; n < askHistory.length; n++)
-      {
-bands = bollinger (askHistory, n, k);
-}
-}
-
-console.log('bands 1m over 8m, k <4 n <8.length: ' + JSON.stringify(bands[bands.length-1]))
-    }
-    
-}
 
 // the amount BTC we begin the script with
 var startBtc;
@@ -191,7 +170,7 @@ async function doPost(req, res) {
 
 // initially set our startBtc (static)
 
-startBtc =0.076157879;
+startBtc =0.045941147;
 
 // add info to gsheet every 60s
 
@@ -204,21 +183,21 @@ setInterval(function() {
 setTimeout(function() {
     sheetaddrow();
 }, 10000);
-
+let gogobb = true;
 // a failsafe that triggers if we use too much margin
 
 setInterval(async function() {
-    if (avail / btcNow < 0.55) {
+    if (avail / btcNow > 0.55) {
         //console.log(new Date(Date.now()).toTimeString() + ': margin > 55%')
         liq += ' margin > 55%'
         restClient.positions().then((result) => {
             for (var r in result) {
                 for (var a in result[r]) {
-                    if (result[r][a].direction == 'sell' && gogobuy) {
+                    if (result[r][a].direction == 'sell' && gogobuy && gogobb) {
                         restClient.buy('BTC-PERPETUAL', -1 * result[r][a].size, lb, true).then((result) => {
 
                         });
-                    } else if (gogosell &&result[r][a].direction == 'buy' ){
+                    } else if (gogosell &&result[r][a].direction == 'buy' && gogobb ){
                         restClient.sell('BTC-PERPETUAL', 1 * result[r][a].size, lb, true).then((result) => {
 
                         });
@@ -233,11 +212,10 @@ setInterval(async function() {
 
 setInterval(async function() {
     if (oldPerc != 0) {
-        console.log('oldperc:' + oldPerc)
         let diff = -1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4) - oldPerc
-        if (diff < -5) {
-            console.log(new Date(Date.now()).toTimeString() + ': portfolio > 5% loss since last direction switch, selling at market')
-            liq += ' portfolio > 5% loss since last direction switch'
+        if (diff < -25) {
+            console.log(new Date(Date.now()).toTimeString() + ': portfolio > 25% loss since last direction switch, selling at market')
+            liq += ' portfolio > 25% loss since last direction switch'
             restClient.positions().then((result) => {
                 setTimeout(async function(){
                 for (var r in result) {
@@ -288,7 +266,6 @@ function sheetaddrow() {
                 'Pos': pos,
                 'HA': ha,
                 'tar': tar,
-                'bands': JSON.stringify(bands[bands.length-1]),
                 'tar 1.5': tar * 1.5,
                 'last liquidation': liq,
                 'neg tar 1.5': tar * 1.5 * -1,
@@ -315,15 +292,15 @@ setInterval(function() {
     restClient.account().then((result) => {
         //////console.log('1sec');
         ////////console.log(result);
-        avail = result.result.availableFunds;
+        avail = result.result.maintenanceMargin;
         btcNow = (result.result.equity);
         if (first){
             first = false;
                 oldPerc = -1 * (100 * (1 - (btcNow / startBtc))).toPrecision(4);
 
         }
-        if (avail / btcNow < 0.15) {
-             //console.log(new Date(Date.now()).toTimeString() + ': margin avail <15%, stopping orders in opposng direction')
+        if (avail / btcNow > 0.75) {
+             console.log(new Date(Date.now()).toTimeString() + ': margin avail <25%, stopping orders in opposng direction')
              restClient.getopenorders('BTC-PERPETUAL').then((result) => {
             var go = true;
             for (var a in result) {
@@ -383,9 +360,9 @@ setInterval(function() {
             }
         }
         let vol = av + bv;
-        vol = vol / 5 * 1;
-        if (vol > (btcNow * ha) / 4) {
-            vol = (btcNow * ha) / 4;
+        vol = vol / 5 * 4;
+        if (vol > (btcNow * ha) / 1) {
+            vol = (btcNow * ha) / 1;
         }
         tar = vol;
     })
@@ -409,11 +386,11 @@ setInterval(async function() {
         for (var r in result) {
             for (var a in result[r]) {
                 var laladir = result[r][a].size;
-                //////console.log(result[r][a].direction);
+                //////console.log(result[r][a].direction)
                 if (gogoFour < 25 && result[r][a].size > ((tar * 1.5)) || result[r][a].size < (-1 * (tar * 1.5))) {
                     var s = result[r][a].size;
                     //////console.log('20000')
-                    if (result[r][a].direction == 'sell' && gogobuy) {
+                    if (result[r][a].direction == 'sell' && gogobuy && gogobb) {
                         //////console.log('buybuy')
                         restClient.buy('BTC-PERPETUAL', -1 * Math.floor(s / 4), ha - 1.5, true).then((result) => {
                             //////console.log(result);
@@ -427,7 +404,7 @@ setInterval(async function() {
                         });
 
                         //////console.log(result);
-                    } else if (result[r][a].direction == 'buy' && gogosell){
+                    } else if (result[r][a].direction == 'buy' && gogosell && gogobb){
                         //////console.log('sellsell')
                         restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), lb + 1.5, true).then((result) => {
                             //////console.log(result);
@@ -451,7 +428,7 @@ setInterval(async function() {
                     //console.log(new Date(Date.now()).toTimeString() + ': double outter bounds')
                     var s = result[r][a].size;
                     //////console.log('20000')
-                    if (result[r][a].direction == 'sell' && gogobuy) {
+                    if (result[r][a].direction == 'sell' && gogobuy && gogobb) {
                         //////console.log('buybuy')
                         restClient.buy('BTC-PERPETUAL', -1 * Math.floor(s / 4), lb - 1.5, true).then((result) => {
                             //////console.log(result);
@@ -465,7 +442,7 @@ setInterval(async function() {
                             //////console.log(result);
                             //////console.log(result);
                         });
-                    } else if (result[r][a].direction == 'buy' && gogosell) {
+                    } else if (result[r][a].direction == 'buy' && gogosell && gogobb) {
                         //////console.log('sellsell')
                         restClient.sell('BTC-PERPETUAL', Math.floor(s / 4), ha + 1.5, true).then((result) => {
                             //////console.log(result);
@@ -507,25 +484,27 @@ setInterval(async function() {
 setInterval(function() {
     restClient.getopenorders('BTC-PERPETUAL').then((result) => {
         var go = true;
+        if (gogobb){
         for (var a in result) {
             for (var o in result[a]) {
                 //////console.log(result[a][o])                                           
                 if (result[a][o].direction == 'sell' && result[a][o].price> lb + 2 ) { 
-                    //console.log('buying, cancel lb - 2')
+                    console.log('selling, cancel lb + 2')
                     restClient.cancel(result[a][o].orderId).then((result) => {
 
                     })
                                                                                              
                 } else if (result[a][o].direction == 'buy' && result[a][o].price < ha + 2) { 
-                    //console.log('selling, cancel ha + 2')
+                    console.log('buying, cancel ha - 2')
                     restClient.cancel(result[a][o].orderId).then((result) => {          
                                                                                         
                     })
                 }
             }
         }
+    }
     })
-}, 5000)
+}, 35000)
 
 // buy or sell if no other buy/sell order exists
 
@@ -551,11 +530,11 @@ setInterval(function() {
             }
         });
         if (go) {
-            if (gogoFour < 10 && av > 3000 && gogosell) {
+            if (gogoFour < 10  && gogosell && gogobb) {
                 gogoFour++;
                 restClient.sell('BTC-PERPETUAL', tar, ha, true).then((result) => {});
             }
-            if (gogoFour < 10 && bv > 3000 && gogobuy) {
+            if (gogoFour < 10  && gogobuy && gogobb) {
                 gogoFour++;
                 restClient.buy('BTC-PERPETUAL', tar, lb, true).then((result) => {});
 
@@ -607,19 +586,83 @@ setInterval(function() {
                 }
             }
             let vol = av + bv;
-            vol = vol / 5 * 1;
-            if (vol > (btcNow * ha) / 4) {
-                vol = (btcNow * ha) / 4;
+            vol = vol / 5 * 4;
+            if (vol > (btcNow * ha) / 1) {
+                vol = (btcNow * ha) / 1;
             }
             tar = vol;
 
         }
+
     })
 }, 550)
+
+setInterval(function(){
+restClient.index((result) => {
+  let index = (result.result.btc)
+        if (askHistory[bbc] == undefined){
+            askHistory[bbc] = []
+        }
+        if (bands[bbc] == undefined){
+            bands[bbc] = {}
+        }
+
+        askHistory[bbc].push({c:(((ha + lb) / 2) + index) /2});
+                      
+            if (askHistory[bbc].length > 8){
+                askHistory[bbc].shift();
+                for (var k = 1; k < 4; k++)
+            {
+              for (var n = 1; n < askHistory[bbc].length; n++)
+              {
+
+        bands[bbc] = bollinger (askHistory[bbc], n, k);
+       
+    }
+        }
+        var bb = -1*(100*(1-bands[bbc][bands[bbc].length-1].ub / bands[bbc][bands[bbc].length-1].lb))
+        if (bbc == 1){
+            console.log('onn of the 25 2-secondly bollinger band coefficients is ' + bb + ' needs to be 0.5 to do the magic!')
+        }
+        if (bb > 0.5){
+            console.log('gogobb false ' + bb)
+            restClient.getopenorders('BTC-PERPETUAL').then((result) => {
+            for (var a in result) {
+                for (var o in result[a]) {
+                    if (result[a][o].direction == 'sell' && pos < 0) {
+                        //console.log('selling, pos < 0')
+                        //console.log('pos: ' + pos)
+                    restClient.cancel(result[a][o].orderId).then((result) => {
+
+                    })
+
+                    } else if (result[a][o].direction == 'buy' && pos > 0) {
+                        //console.log('buying, pos > 0')
+                        //console.log('pos: ' + pos)
+                    restClient.cancel(result[a][o].orderId).then((result) => {
+
+                    })
+                    }
+                }
+            }
+        })
+            gogobb = false;
+            }
+            else {
+                gogobb = true;
+            }
+        }
+        bbc++;
+        if (bbc > 25){
+            bbc = 0;
+        }
+
+});
+}, 2000)
 setInterval(function() {
 
-    if (gogo == true && gogoFour < 10 && bv > 3000 && gogobuy) {
-        if (avail / btcNow < 0.75) {
+    if (gogo == true && gogoFour < 10  && gogobuy && gogobb) {
+        if (avail / btcNow < 0.25) {
             tar = tar + btcNow * 1200
         }
         gogoFour++;
@@ -631,8 +674,8 @@ setInterval(function() {
             });
         }, 800);
     }
-    if (gogo == true && gogoFour < 10 && av > 3000 && gogosell) {
-        if (avail / btcNow < 0.75) {
+    if (gogo == true && gogoFour < 10 && gogosell && gogobb) {
+        if (avail / btcNow < 0.25) {
             tar = tar + btcNow * 1200
         }
         gogoFour++;
