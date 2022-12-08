@@ -6,11 +6,11 @@
   "bundleDependencies": false,
   "dependencies": {
     "bitmex-realtime-api": "^0.4.0",
-    "body-parser": "^1.18.3",
-    "ccxt": "^1.18.152",
+    "body-parser": "^1.20.1",
+    "ccxt": "^1.95.43",
     "deribit-api": "^1.0.2",
     "ejs": "^2.6.1",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "google-spreadsheet": "*",
     "request": "^2.88.0",
     "stats-lite": "^2.2.0"
